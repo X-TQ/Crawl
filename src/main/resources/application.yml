@@ -1,6 +1,36 @@
 server:
-  port: 8080
+  port: 8081
 spring:
   application:
     name: Crawl
+  datasource:
+    druid:
+      url: jdbc:mysql://210.22.22.150:1759/ZhaoBiao?characterEncoding=utf-8&serverTimezone=UTC
+      username: xtq
+      password: 123456
+      driverClassName: com.mysql.cj.jdbc.Driver
+      initialSize: 5  #初始建立连接数量
+      minIdle: 5  #最小连接数量
+      maxActive: 20 #最大连接数量
+      maxWait: 10000  #获取连接最大等待时间，毫秒
+      testOnBorrow: true #申请连接时检测连接是否有效
+      testOnReturn: false #归还连接时检测连接是否有效
+      timeBetweenEvictionRunsMillis: 60000 #配置间隔检测连接是否有效的时间（单位是毫秒）
+      minEvictableIdleTimeMillis: 300000  #连接在连接池的最小生存时间（毫秒）
+crawl:
+  ChinabiddingMofcomGovCn:
+    detailPre: /bidDetail  #详情url,前缀
+    pageTotal: 1   #总页数
+    maxLength: 50  #字数超过50换行
+    #请求参数
+    request:
+      #项目公告类型|  1：招标公告  2：招标变更公告  3：评标结果公示  4：中标结果公告
+      typeCode: 1
+      #行业类型|  A:农、林、牧、渔业 B:采矿业  C:制造业  D:电力、热力、燃气及水生产和供应业  E:建筑业 F:批发和零售业
+      #      G:交通运输、仓储和邮政业  H:住宿和餐饮业 I:信息传输、软件和信息技术服务业 J:金融业
+      #      K:房地产业  L:租赁和商务服务业  M:科学研究和技术服务业  N:水利、环境和公共设施管理业
+      #      O:居民服务、修理和其他服务业  P:教育  Q:卫生和社会工作  R:文化、体育和娱乐业
+      #      S:公共管理、社会保障和社会组织  T:国际组织  0：所有
+      industryCode: 0
+
 

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.nchfly.crawl.dao.ProjectNewMapper">
+
+    <select id="fingByProjectCode" parameterType="String" resultType="cn.nchfly.crawl.domain.pojo.ProjectNew">
+        select
+        project_id projectId,
+        project_code projectCode,
+        project_title projectTitle,
+        project_subtitle projectSubTitle,
+        project_money projectMoney,
+        project_money_source projectMoneySource,
+        project_detail projectDetail,
+        project_publish_time projectPublishTime,
+        project_create_time projectCreateTime,
+        project_update_time projectUpdateTime,
+        province_name provinceName,
+        city_name cityName,
+        detail_url detailUrl,
+        industry_name industryName
+        from t_project_new
+        where project_code = #{0}
+    </select>
+
+    <insert id="add" parameterType="cn.nchfly.crawl.domain.pojo.ProjectNew" useGeneratedKeys="true" keyColumn="project_id" keyProperty="projectId">
+        insert into t_project_new
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null and projectCode !='' ">
+                project_code,
+            </if>
+            <if test="projectTitle != null and projectTitle !='' ">
+                project_title,
+            </if>
+            <if test="projectSubTitle != null and projectSubTitle !='' ">
+                project_subtitle,
+            </if>
+            <if test="projectMoney != null">
+                project_money,
+            </if>
+            <if test="projectMoneySource != null and projectMoneySource !='' ">
+                project_money_source,
+            </if>
+            <if test="projectDetail != null and projectDetail !='' ">
+                project_detail,
+            </if>
+            <if test="projectPublishTime != null">
+                project_publish_time,
+            </if>
+            <if test="projectCreateTime != null">
+                project_create_time,
+            </if>
+            <if test="projectUpdateTime != null">
+                project_update_time,
+            </if>
+            <if test="provinceName != null and provinceName !='' ">
+                province_name,
+            </if>
+            <if test="cityName != null and cityName !='' ">
+                city_name,
+            </if>
+            <if test="detailUrl != null and detailUrl !='' ">
+                detail_url,
+            </if>
+            <if test="industryName != null and industryName != '' ">
+                industry_name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectCode != null and projectCode !='' ">
+                #{projectCode},
+            </if>
+            <if test="projectTitle != null and projectTitle !='' ">
+                #{projectTitle},
+            </if>
+            <if test="projectSubTitle != null and projectSubTitle !='' ">
+                #{projectSubTitle},
+            </if>
+            <if test="projectMoney != null">
+                #{projectMoney},
+            </if>
+            <if test="projectMoneySource != null and projectMoneySource !='' ">
+                #{projectMoneySource},
+            </if>
+            <if test="projectDetail != null and projectDetail !='' ">
+                #{projectDetail},
+            </if>
+            <if test="projectPublishTime != null">
+                #{projectPublishTime},
+            </if>
+            <if test="projectCreateTime != null">
+                #{projectCreateTime},
+            </if>
+            <if test="projectUpdateTime != null">
+                #{projectUpdateTime},
+            </if>
+            <if test="provinceName != null and provinceName !='' ">
+                #{provinceName},
+            </if>
+            <if test="cityName != null and cityName !='' ">
+                #{cityName},
+            </if>
+            <if test="detailUrl != null and detailUrl !='' ">
+                #{detailUrl},
+            </if>
+            <if test="industryName != null and industryName != '' ">
+                #{industryName},
+            </if>
+        </trim>
+    </insert>
+</mapper>
