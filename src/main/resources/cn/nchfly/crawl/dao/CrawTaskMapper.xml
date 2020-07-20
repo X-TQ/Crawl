@@ -13,4 +13,7 @@
         t_crawl_task
     </select>
 
+    <select id="getIsExecutionFlag" resultType="cn.nchfly.crawl.domain.pojo.Flag">
+        SELECT * FROM t_flag
+    </select>
 </mapper>

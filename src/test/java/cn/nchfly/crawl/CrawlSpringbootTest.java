@@ -1,5 +1,7 @@
 package cn.nchfly.crawl;
 
+import cn.nchfly.crawl.dao.CrawTaskMapper;
+import cn.nchfly.crawl.domain.pojo.Flag;
 import cn.nchfly.crawl.service.CrawlService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,10 +20,14 @@ public class CrawlSpringbootTest {
 
     @Autowired
     private CrawlService service;
+    @Autowired
+    private CrawTaskMapper crawTaskMapper;
 
     @Test
     public void testDeatilUrl() throws Exception {
-        int size = service.crawlTask();
-        System.out.println(size);
+        //手动控制,执行任务
+        /*Flag flag = crawTaskMapper.getIsExecutionFlag();
+        int size = service.crawlTask(flag);
+        System.out.println(size);*/
     }
 }

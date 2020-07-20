@@ -1,6 +1,7 @@
 package cn.nchfly.crawl.service.impl;
 
 import cn.nchfly.crawl.dao.ProjectNewMapper;
+import cn.nchfly.crawl.domain.pojo.Flag;
 import cn.nchfly.crawl.domain.pojo.ProjectNew;
 import cn.nchfly.crawl.service.ChinabiddingMofcomGovCnCrawTaskService;
 import cn.nchfly.crawl.service.CrawlService;
@@ -38,16 +39,32 @@ public class ChinabiddingMofcomGovCnCrawTaskServiceImpl implements ChinabiddingM
     private String detailPre;
     @Value("${crawl.ChinabiddingMofcomGovCn.pageTotal}")
     private Integer pageTotal;
+    @Value("${crawl.ChinabiddingMofcomGovCn.maxLength}")
+    private Integer maxLength;
 
     //是否需要继续分页获取数据标识 如果为true,说明当前项目发布时间 已经不是当天的了,无需进行后续分页操作
     boolean flag = false;
+
+    /**
+     * 初始化参数
+     * @param flag
+     */
+    public void init(Flag flag){
+        typeCode = flag.getTypeCode();
+        industryCode = flag.getIndustryCode();
+        pageTotal = flag.getPageTotal();
+        maxLength = flag.getMaxLength();
+    }
 
     /**
      * 执行爬虫
      * @return
      * @throws Exception
      */
-    public int crawlTask() throws Exception {
+    public int crawlTask(Flag flag) throws Exception {
+        //初始化参数
+        init(flag);
+
         String url = "https://chinabidding.mofcom.gov.cn/zbwcms/front/bidding/bulletinInfoList";
         //获取项目基本信息,和项目详情url
         Map<String, ProjectNew> resMap = crawlWebDetailUrl(url ,true);
@@ -277,7 +294,7 @@ public class ChinabiddingMofcomGovCnCrawTaskServiceImpl implements ChinabiddingM
                     flag++;
 
                     // 长度超过50 独占一行
-                    if(split[1].trim().length() >= 50){
+                    if(split[1].trim().length() >= maxLength){
                         flag = 2;
                         strHtml.append("<th style=\"border: 1px solid #ccc;background-color:#e3f1fb;width:160px;text-align:center;\">"+split[0].trim()+"</th> ");
                         strHtml.append("<td colspan='3' style=\"text-align:left; text-indent: 5px; width:300px; border: 1px solid #ccc;\">"+split[1].trim()+"</td>");
@@ -331,7 +348,7 @@ public class ChinabiddingMofcomGovCnCrawTaskServiceImpl implements ChinabiddingM
                         flag++;
 
                         // 长度超过50 独占一行
-                        if(split[1].trim().length() >= 50){
+                        if(split[1].trim().length() >= maxLength){
                             flag = 2;
                             strHtml.append("<th style=\"border: 1px solid #ccc;background-color:#e3f1fb;width:160px;text-align:center;\">"+split[0].trim()+"</th> ");
                             strHtml.append("<td colspan='3' style=\"text-align:left; text-indent: 5px; width:300px; border: 1px solid #ccc;\">"+split[1].trim()+"</td>");

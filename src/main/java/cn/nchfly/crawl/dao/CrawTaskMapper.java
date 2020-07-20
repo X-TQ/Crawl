@@ -1,6 +1,7 @@
 package cn.nchfly.crawl.dao;
 
 import cn.nchfly.crawl.domain.pojo.CrawlTask;
+import cn.nchfly.crawl.domain.pojo.Flag;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -14,4 +15,6 @@ import java.util.List;
 public interface CrawTaskMapper {
     //获取所有爬虫任务
     List<CrawlTask> getAll();
+    //手动控制,执行任务
+    Flag getIsExecutionFlag();
 }

@@ -3,6 +3,7 @@ package cn.nchfly.crawl.thread;
 import cn.nchfly.crawl.common.SpringBeanUtils;
 import cn.nchfly.crawl.dao.CrawTaskMapper;
 import cn.nchfly.crawl.domain.pojo.CrawlTask;
+import cn.nchfly.crawl.domain.pojo.Flag;
 import cn.nchfly.crawl.service.CrawlService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,10 @@ public class CrawlThread implements Runnable {
 
     private CrawTaskMapper crawTaskMapper;
 
-    public CrawlThread(){
+    private Flag flag;
+
+    public CrawlThread(Flag flag){
+        this.flag = flag;
         this.crawTaskMapper = SpringBeanUtils.getBean(CrawTaskMapper.class);
     }
 
@@ -42,7 +46,7 @@ public class CrawlThread implements Runnable {
                             String taskClassName = crawlTask.getTaskClassName();
                             CrawlService service = (CrawlService) SpringBeanUtils.getBeanByName(taskClassName);
                             log.info("[定时任务【{}|招标爬虫】开始执行]时间: {}" ,taskName ,sdf.format(new Date()));
-                            int crawlTotal = service.crawlTask();
+                            int crawlTotal = service.crawlTask(flag);
                             log.info("[定时任务【{}|招标爬虫】爬取总数]总数: {}" ,taskName ,crawlTotal);
                             log.info("[定时任务【{}|招标爬虫】结束执行]时间: {}" ,taskName ,sdf.format(new Date()));
                         }catch (Exception ex){
