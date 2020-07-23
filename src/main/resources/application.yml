@@ -5,7 +5,7 @@ spring:
     name: Crawl
   datasource:
     druid:
-      url: jdbc:mysql://210.22.22.150:1759/ZhaoBiao?characterEncoding=utf-8&serverTimezone=UTC
+      url: jdbc:mysql://210.22.22.150:1759/ZhaoBiao?useUnicode=true&characterEncoding=utf8&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai
       username: xtq
       password: 123456
       driverClassName: com.mysql.cj.jdbc.Driver

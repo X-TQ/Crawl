@@ -16,6 +16,7 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -121,6 +122,7 @@ public class ChinabiddingMofcomGovCnCrawTaskServiceImpl implements ChinabiddingM
      * @return
      * @throws Exception
      */
+    @Transactional
     public int crawlWebDetail(Map<String, ProjectNew> resMap) throws Exception {
         int crawTotal = 0;
         Set<Map.Entry<String, ProjectNew>> entrySet = resMap.entrySet();
