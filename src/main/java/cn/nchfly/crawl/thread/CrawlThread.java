@@ -38,7 +38,7 @@ public class CrawlThread implements Runnable {
             //获取所有爬虫任务
             List<CrawlTask> crawlTaskList = crawTaskMapper.getAll();
             for (CrawlTask crawlTask : crawlTaskList){
-                //有多个爬虫任务,就创建多少线程
+                //多个爬虫任务创建多少线程
                 new Thread(new Runnable() {
                     public void run() {
                         try {

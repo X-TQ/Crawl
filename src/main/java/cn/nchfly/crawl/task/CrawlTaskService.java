@@ -27,9 +27,9 @@ public class CrawlTaskService {
 
 
     //@Scheduled(cron = "0/59 0 0-2 * * ?")//每2小时执行一次
-    //@Scheduled(cron = "0/50 * * * * ?")//每50执行一次
     //@Scheduled(cron = "0/30 * * * * ?")//每30执行一次
-    @Scheduled(cron = "0/59 0/3 * * * ?")//每3分钟执行
+    //@Scheduled(cron = "0/59 0/3 * * * ?")//每3分钟执行
+    @Scheduled(cron = "0/50 * * * * ?")//每50执行一次
     public void craw(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         //手动控制,执行任务

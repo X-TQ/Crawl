@@ -42,8 +42,12 @@ public class ChinabiddingMofcomGovCnCrawTaskServiceImpl implements ChinabiddingM
     @Value("${crawl.ChinabiddingMofcomGovCn.maxLength}")
     private Integer maxLength;
 
-    //是否需要继续分页获取数据标识 如果为true,说明当前项目发布时间 已经不是当天的了,无需进行后续分页操作
-    boolean flag = false;
+    /**
+     * 是否需要继续分页获取数据标识  默认为true
+     * 如果为true,说明当前项目发布时间,依旧是当天的;需要进行分页操作
+     * 如果为false,说明当前项目发布时间 已经不是当天的了,无需进行后续分页操作
+     */
+    boolean flag = true;
 
     /**
      * 初始化参数
@@ -95,19 +99,19 @@ public class ChinabiddingMofcomGovCnCrawTaskServiceImpl implements ChinabiddingM
 
         //首次
         params.put("pageNumber", "1");
-        resMap = processCrawlWebDetailUrl(url,params,resMap,false);
+        resMap = processCrawlWebDetailUrl(url,params,resMap,true);
 
         //分页
-        for (int page = 2; page <= pageTotal; page ++){
+        /*for (int page = 2; page <= pageTotal; page ++){
             params.put("pageNumber", page+"");
-            resMap = processCrawlWebDetailUrl(url,params,resMap,false);
-        }
-        /*if(!flag){
+            resMap = processCrawlWebDetailUrl(url,params,resMap,true);
+        }*/
+        if(flag){
             for (int page = 2; page <= pageTotal; page ++){
                 params.put("pageNumber", page+"");
                 resMap = processCrawlWebDetailUrl(url,params,resMap,true);
             }
-        }*/
+        }
         return resMap;
     }
 
@@ -181,11 +185,13 @@ public class ChinabiddingMofcomGovCnCrawTaskServiceImpl implements ChinabiddingM
         for(Map<String,String> entity : responseList){
             //只爬取当天发布的项目
             if(isCurrent){
-                Date publishTime = sdf.parse(entity.get("publishTime"));
-                Date currentDate = sdf.parse(sdf.format(new Date()));
+                /*Date publishTime = sdf.parse(entity.get("publishTime"));
+                Date currentDate = sdf.parse(sdf.format(new Date()));*/
+                String publishTime = entity.get("publishTime").trim();
+                String currentDate = sdf.format(new Date());
                 //只爬取今天的
-                if(publishTime != currentDate){
-                    flag = true;
+                if(!publishTime.equals(currentDate)){
+                    flag = false;
                     //结束循环
                     break;
                 }
@@ -295,9 +301,20 @@ public class ChinabiddingMofcomGovCnCrawTaskServiceImpl implements ChinabiddingM
 
                     // 长度超过50 独占一行
                     if(split[1].trim().length() >= maxLength){
-                        flag = 2;
-                        strHtml.append("<th style=\"border: 1px solid #ccc;background-color:#e3f1fb;width:160px;text-align:center;\">"+split[0].trim()+"</th> ");
-                        strHtml.append("<td colspan='3' style=\"text-align:left; text-indent: 5px; width:300px; border: 1px solid #ccc;\">"+split[1].trim()+"</td>");
+                        //如果是第二列,长度超过了maxLength,那么 <th></th><td></td>
+                        if(flag == 2){
+                            strHtml.append("<th style=\"border: 1px solid #ccc;background-color:#e3f1fb;width:160px;text-align:center;\">&nbsp;&nbsp;</th> ");
+                            strHtml.append("<td style=\"text-align:left; text-indent: 5px; width:300px; border: 1px solid #ccc;\">&nbsp;&nbsp;</td>");
+                            strHtml.append("<tr>");
+                            strHtml.append("<th style=\"border: 1px solid #ccc;background-color:#e3f1fb;width:160px;text-align:center;\">"+split[0].trim()+"</th> ");
+                            strHtml.append("<td colspan='3' style=\"text-align:left; text-indent: 5px; width:300px; border: 1px solid #ccc;\">"+split[1].trim()+"</td>");
+                        }else {
+                            flag = 2;
+                            strHtml.append("<th style=\"border: 1px solid #ccc;background-color:#e3f1fb;width:160px;text-align:center;\">"+split[0].trim()+"</th> ");
+                            strHtml.append("<td colspan='3' style=\"text-align:left; text-indent: 5px; width:300px; border: 1px solid #ccc;\">"+split[1].trim()+"</td>");
+                        }
+
+
                     }else {
                         strHtml.append("<th style=\"border: 1px solid #ccc;background-color:#e3f1fb;width:160px;text-align:center;\">"+split[0].trim()+"</th> ");
                         strHtml.append("<td style=\"text-align:left; text-indent: 5px; width:300px; border: 1px solid #ccc;\">"+split[1].trim()+"</td>");
@@ -349,9 +366,18 @@ public class ChinabiddingMofcomGovCnCrawTaskServiceImpl implements ChinabiddingM
 
                         // 长度超过50 独占一行
                         if(split[1].trim().length() >= maxLength){
-                            flag = 2;
-                            strHtml.append("<th style=\"border: 1px solid #ccc;background-color:#e3f1fb;width:160px;text-align:center;\">"+split[0].trim()+"</th> ");
-                            strHtml.append("<td colspan='3' style=\"text-align:left; text-indent: 5px; width:300px; border: 1px solid #ccc;\">"+split[1].trim()+"</td>");
+                            //如果是第二列,长度超过了maxLength,那么 <th></th><td></td>
+                            if(flag == 2){
+                                strHtml.append("<th style=\"border: 1px solid #ccc;background-color:#e3f1fb;width:160px;text-align:center;\">&nbsp;&nbsp;</th> ");
+                                strHtml.append("<td style=\"text-align:left; text-indent: 5px; width:300px; border: 1px solid #ccc;\">&nbsp;&nbsp;</td>");
+                                strHtml.append("<tr>");
+                                strHtml.append("<th style=\"border: 1px solid #ccc;background-color:#e3f1fb;width:160px;text-align:center;\">"+split[0].trim()+"</th> ");
+                                strHtml.append("<td colspan='3' style=\"text-align:left; text-indent: 5px; width:300px; border: 1px solid #ccc;\">"+split[1].trim()+"</td>");
+                            }else {
+                                flag = 2;
+                                strHtml.append("<th style=\"border: 1px solid #ccc;background-color:#e3f1fb;width:160px;text-align:center;\">"+split[0].trim()+"</th> ");
+                                strHtml.append("<td colspan='3' style=\"text-align:left; text-indent: 5px; width:300px; border: 1px solid #ccc;\">"+split[1].trim()+"</td>");
+                            }
                         }else {
                             strHtml.append("<th style=\"border: 1px solid #ccc;background-color:#e3f1fb;width:160px;text-align:center;\">"+split[0].trim()+"</th> ");
                             strHtml.append("<td style=\"text-align:left; text-indent: 5px; width:300px; border: 1px solid #ccc;\">"+split[1].trim()+"</td>");
