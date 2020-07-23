@@ -298,6 +298,10 @@ public class ChinabiddingMofcomGovCnCrawTaskServiceImpl implements ChinabiddingM
                     split = text.split("：");
                 }
 
+                if(split.length > 2){
+                    continue;
+                }
+
                 if(split.length == 2){
                     flag++;
 
@@ -361,6 +365,10 @@ public class ChinabiddingMofcomGovCnCrawTaskServiceImpl implements ChinabiddingM
                     split = text.split(":");
                     if(split.length < 2){
                         split = text.split("：");
+                    }
+
+                    if(split.length > 2){
+                        continue;
                     }
 
                     if(split.length == 2){
